@@ -9,11 +9,15 @@ const logger = winston.createLogger({
   level: "info",
 
   // Define Log Format
-  format: winston.format.combine(  
+  format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
   ),
   // Define Transport (Where Logs Go)
   transports: [new winston.transports.Console()],
+  // transports: [
+  //   new winston.transports.Console(),
+  //   new winston.transports.File({ filename: "error.log", level: "error" }),
+  // ],
 });
 module.exports = logger;

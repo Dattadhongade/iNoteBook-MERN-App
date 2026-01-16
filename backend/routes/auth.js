@@ -3,6 +3,10 @@ const User = require("../models/Users");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const logger = require("../config/logger");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = "dasddasdasd@zfdf";
 
 // Create a user using POST method - endpoint is "/api/auth/createUser".Doesnt require auth.
 router.post(
@@ -32,18 +36,32 @@ router.post(
           .status(400)
           .json({ error: "User already exits. Please use different Email." });
       }
+      const salt = await bcrypt.genSalt(10);
+      secPass = await bcrypt.hash(req.body.password, salt);
+
       user = await User.create({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
+        password: secPass,
       });
+      const data = {
+        user: {
+          is: user.id,
+        },
+      };
       logger.info("User created successfully", { userId: user._id });
-      res.json(user);
+      const authToken = jwt.sign(data, JWT_SECRET);
+      res.json({ authToken });
+      // res.json(user);
+      logger.info("tocken created succesfully for user", {
+        email: req.body.email,
+      });
     } catch (error) {
       logger.error("Create user failed", {
         message: error.message,
         stack: error.stack,
       });
+
       res.status(500).send("Something went wrong");
     }
   }
