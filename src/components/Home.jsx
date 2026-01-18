@@ -1,9 +1,13 @@
 import React from "react";
+
+import Notes from "./Notes";
+
 const Home = () => {
   return (
-    <div>
-      <h1>Dady's Home </h1>
-    </div>
+    <>
+    
+      <Notes />
+    </>
   );
 };
 export default Home;

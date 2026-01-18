@@ -4,17 +4,21 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Aboute from "./components/Aboute";
 import NoteState from "./context/notes/NoteState";
+import Alert from "./components/Alert";
 
 function App() {
   return (
     <>
       <NoteState>
         <Header />
-        {/* <Aboute /> */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Aboute" element={<Aboute />} />
-        </Routes>
+
+        <div className="container  " style={{ marginTop: "5rem" }}>
+          <Alert message="This is an alert" />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Aboute" element={<Aboute />} />
+          </Routes>
+        </div>
       </NoteState>
     </>
   );
