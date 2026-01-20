@@ -12,7 +12,7 @@ function App() {
       <NoteState>
         <Header />
 
-        <div className="container  " style={{ marginTop: "5rem" }}>
+        <div className="container " style={{ marginTop: "5rem" }}>
           <Alert message="This is an alert" />
           <Routes>
             <Route path="/" element={<Home />} />

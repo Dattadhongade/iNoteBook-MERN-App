@@ -7,12 +7,13 @@ const AddNote = () => {
   const [note, setNote] = useState({
     title: "",
     description: "",
-    tag: "default",
+    tag: "",
   });
 
   const handleClick = (e) => {
     e.preventDefault();
-    addNote(note.title,note.description,note.tag);
+    addNote(note.title, note.description, note.tag);
+    setNote({ title: "", description: "", tag: "" });
   };
 
   const onChange = (e) => {
@@ -26,6 +27,9 @@ const AddNote = () => {
         <form>
           <div className="row my-3">
             <div className="col">
+              <label htmlFor="title" className="form-label">
+                Title
+              </label>
               <input
                 type="text"
                 className="form-control border border-dark"
@@ -33,23 +37,16 @@ const AddNote = () => {
                 aria-label="NoteTitle"
                 name="title"
                 id="title"
+                value={note.title}
+                minLength={5}
+                required
                 onChange={onChange}
               />
             </div>
             <div className="col">
-              <input
-                type="text"
-                className="form-control border border-dark"
-                placeholder="Note Description"
-                aria-label="Note Description"
-                name="description"
-                id="description"
-                onChange={onChange}
-              />
-            </div>
-          </div>
-          <div className="row my-3">
-            <div className="col">
+              <label htmlFor="tag" className="form-label">
+                Tag
+              </label>
               <input
                 type="text"
                 className="form-control border border-dark"
@@ -57,6 +54,26 @@ const AddNote = () => {
                 aria-label="Tag for Note"
                 name="tag"
                 id="tag"
+                value={note.tag}
+                onChange={onChange}
+              />
+            </div>
+          </div>
+          <div className="row my-2">
+            <div className="col">
+              <label htmlFor="description" className="form-label">
+                Description
+              </label>
+              <input
+                type="text"
+                className="form-control border border-dark"
+                placeholder="Note Description"
+                aria-label="Note Description"
+                name="description"
+                id="description"
+                value={note.description}
+                minLength={5}
+                required
                 onChange={onChange}
               />
             </div>
@@ -65,6 +82,7 @@ const AddNote = () => {
             type="submit"
             className="btn btn-primary my-3"
             onClick={handleClick}
+            disabled={note.title.length < 5 || note.description.length < 5}
           >
             Add Note
           </button>
