@@ -3,9 +3,11 @@ import NoteContext from "../context/notes/NoteContext";
 import NotesItem from "./NotesItem";
 import AddNote from "./AddNote";
 import AlertContext from "../context/alert/AlertContext";
+import { useNavigate } from "react-router-dom";
 
 const Notes = () => {
   const { showAlert } = useContext(AlertContext);
+  const navigate = useNavigate();
   // used context from noteContexts
   const context = useContext(NoteContext);
   // Destructuring of notes and fetchnotes functions
@@ -22,7 +24,11 @@ const Notes = () => {
   // useEffect runs once when component mounts
   // It fetches all notes from the backend API
   useEffect(() => {
-    fetchNotes();
+    if (localStorage.getItem("token")) {
+      fetchNotes();
+    } else {
+      navigate("/Login");
+    }
   }, []);
 
   // Update note
@@ -166,11 +172,10 @@ const Notes = () => {
           {notes.length === 0 && "No notes to display"}
         </div>
         {/* loop through an array of notes to render a notes  */}
-        {notes.map((note) => {
-          return (
+        {Array.isArray(notes) &&
+          notes.map((note) => (
             <NotesItem key={note._id} updateNote={updateNote} note={note} />
-          );
-        })}
+          ))}
       </div>
     </>
   );

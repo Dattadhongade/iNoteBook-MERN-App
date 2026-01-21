@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AlertContext from "../context/alert/AlertContext";
 
 const Signup = () => {
+  const { showAlert } = useContext(AlertContext);
   const [credentials, setCredential] = useState({
     name: "",
     email: "",

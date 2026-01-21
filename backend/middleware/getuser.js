@@ -5,7 +5,6 @@ const JWT_SECRET = "dasddasdasd@zfdf";
 const getuser = (req, res, next) => {
   try {
     const authHeader = req.header("Authorization");
-
     // Check if Authorization header exists in the request
     // If no token is sent, user is not authenticated
     if (!authHeader) {
@@ -16,7 +15,9 @@ const getuser = (req, res, next) => {
     // Extract the actual JWT from the Authorization header
     // Expected format: "Bearer <token>"
     // split(" ") breaks it into ["Bearer", "<token>"]
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : authHeader;
     if (!token) {
       return res.status(401).json({ error: "Invalid token format" });
     }

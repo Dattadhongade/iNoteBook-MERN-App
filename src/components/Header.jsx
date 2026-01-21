@@ -1,6 +1,12 @@
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/Login");
+  };
   return (
     <div>
       {/* <NavLink to="/">Home</NavLink> */}
@@ -9,6 +15,17 @@ const Header = () => {
           <NavLink className="navbar-brand" to="/">
             i-NoteBook
           </NavLink>
+          <form className="d-flex mobile">
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button type="submit" className="btn btn-outline-dark">
+              <i className="bi bi-search"></i>
+            </button>
+          </form>
           <button
             className="navbar-toggler"
             type="button"
@@ -20,6 +37,7 @@ const Header = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
@@ -33,27 +51,28 @@ const Header = () => {
                 </NavLink>
               </li>
             </ul>
-            <form className="d-flex">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button type="submit" className="btn btn-outline-dark">
-                Search
-              </button>
-            </form>
-            <NavLink className="btn btn-primary mx-1" to="/Login" role="button">
-              Login
-            </NavLink>
-            <NavLink
-              className="btn btn-primary mx-1"
-              to="/Signup"
-              role="button"
-            >
-              SignUp
-            </NavLink>
+
+            {!localStorage.getItem("token") ? (
+              <div>
+                <NavLink className="btn btn-primary mx-1" to="/Login">
+                  Login
+                </NavLink>
+                <NavLink className="btn btn-primary mx-1" to="/Signup">
+                  SignUp
+                </NavLink>
+              </div>
+            ) : (
+              <div className="d-flex logout align-items-center">
+                <i className="bi bi-person-circle fs-4 text-light mx-2"></i>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="btn btn-dark mx-2"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </nav>

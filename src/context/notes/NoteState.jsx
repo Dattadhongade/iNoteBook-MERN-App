@@ -8,12 +8,12 @@ const NoteState = (props) => {
 
   // ==================================== Fetch all Notes =================================//
   const fetchNotes = async () => {
+    const token = localStorage.getItem("token");
     const response = await fetch(`${host}/api/notes/fetchAllNotes`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjk2YTExMzBlOTg3MWZmNmYzMWU0YzI4In0sImlhdCI6MTc2ODU1ODg5Nn0.oxKOoq3GrbGHkgQ0pXD2zc9ENN1sZ1HDj9y_POWF4qw",
+        Authorization: token,
       },
     });
     const data = await response.json();
@@ -27,8 +27,7 @@ const NoteState = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjk2YTExMzBlOTg3MWZmNmYzMWU0YzI4In0sImlhdCI6MTc2ODU1ODg5Nn0.oxKOoq3GrbGHkgQ0pXD2zc9ENN1sZ1HDj9y_POWF4qw",
+        Authorization: localStorage.getItem("token"),
       },
       //  Convert note data to JSON before sending
       body: JSON.stringify({
@@ -51,8 +50,7 @@ const NoteState = (props) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjk2YTExMzBlOTg3MWZmNmYzMWU0YzI4In0sImlhdCI6MTc2ODU1ODg5Nn0.oxKOoq3GrbGHkgQ0pXD2zc9ENN1sZ1HDj9y_POWF4qw",
+        Authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify({
         title,
@@ -91,8 +89,7 @@ const NoteState = (props) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjk2YTExMzBlOTg3MWZmNmYzMWU0YzI4In0sImlhdCI6MTc2ODU1ODg5Nn0.oxKOoq3GrbGHkgQ0pXD2zc9ENN1sZ1HDj9y_POWF4qw",
+        Authorization: localStorage.getItem("token"),
       },
     });
     const data = await response.json();

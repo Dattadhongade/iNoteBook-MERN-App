@@ -131,16 +131,20 @@ router.post(
 
       logger.info("User found successfully", { userId: user._id });
       // Generate JWT
-      const authToken = jwt.sign(
-        { id: user._id }, // payload
+      const token = jwt.sign(
+        {
+          user: {
+            id: user.id,
+          },
+        },
         JWT_SECRET,
       );
+
       // Send response
       success = true;
       res.status(200).json({
-        message: "Login Successfull",
-        success,
-        authToken,
+        success: true,
+        token,
       });
       // res.json({ authToken });
     } catch (error) {
@@ -177,17 +181,17 @@ router.get("/getUser", getuser, async (req, res) => {
 });
 // Route 4: GET /api/auth/fetchAllUsers
 // Login required
-router.get("/fetchAllUsers", getuser, async (req, res) => {
-  try {
-    const users = await Users.find().select("-password");
-    res.json(users);
-  } catch (error) {
-    logger.error("Get user failed", {
-      message: error.message,
-      stack: error.stack,
-    });
-    res.status(500).send("Internal server error");
-  }
-});
+// router.get("/fetchAllUsers", getuser, async (req, res) => {
+//   try {
+//     const users = await Users.find().select("-password");
+//     res.json(users);
+//   } catch (error) {
+//     logger.error("Get user failed", {
+//       message: error.message,
+//       stack: error.stack,
+//     });
+//     res.status(500).send("Internal server error");
+//   }
+// });
 
 module.exports = router;

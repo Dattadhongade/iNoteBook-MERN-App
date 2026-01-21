@@ -22,9 +22,10 @@ const Login = () => {
     const data = await response.json();
     console.log(data);
     if (data.success) {
-      localStorage.setItem("token", data.authtoken);
-      navigate("/");
+      localStorage.setItem("token", data.token);
+
       showAlert("Login successful", "success");
+      navigate("/");
     } else {
       showAlert("Invalid username or password.", "danger");
     }
