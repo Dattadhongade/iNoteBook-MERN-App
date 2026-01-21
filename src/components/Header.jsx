@@ -44,6 +44,16 @@ const Header = () => {
                 Search
               </button>
             </form>
+            <NavLink className="btn btn-primary mx-1" to="/Login" role="button">
+              Login
+            </NavLink>
+            <NavLink
+              className="btn btn-primary mx-1"
+              to="/Signup"
+              role="button"
+            >
+              SignUp
+            </NavLink>
           </div>
         </div>
       </nav>

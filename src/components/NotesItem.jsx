@@ -1,7 +1,9 @@
 import { useContext } from "react";
 import NoteContext from "../context/notes/NoteContext";
+import AlertContext from "../context/alert/AlertContext";
 
 const NotesItem = (props) => {
+  const { showAlert } = useContext(AlertContext);
   const { note, updateNote } = props;
   const context = useContext(NoteContext);
   // called delete note function
@@ -25,6 +27,7 @@ const NotesItem = (props) => {
             className="bi bi-trash3-fill mx-2"
             onClick={() => {
               deleteNote(note._id);
+              showAlert("Note deleted Successfully", "success");
             }}
           ></i>
         </div>

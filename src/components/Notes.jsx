@@ -2,8 +2,10 @@ import { useContext, useEffect, useRef, useState } from "react";
 import NoteContext from "../context/notes/NoteContext";
 import NotesItem from "./NotesItem";
 import AddNote from "./AddNote";
+import AlertContext from "../context/alert/AlertContext";
 
 const Notes = () => {
+  const { showAlert } = useContext(AlertContext);
   // used context from noteContexts
   const context = useContext(NoteContext);
   // Destructuring of notes and fetchnotes functions
@@ -37,6 +39,7 @@ const Notes = () => {
   const handleClick = (e) => {
     e.preventDefault();
     editNote(note.id, note.etitle, note.edescription, note.etag);
+    showAlert("Note Updated Successfully", "success");
 
     refClose.current.click();
   };

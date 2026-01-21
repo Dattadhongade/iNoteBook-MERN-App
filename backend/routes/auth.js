@@ -6,6 +6,7 @@ const logger = require("../config/logger");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const getuser = require("../middleware/getuser");
+const Users = require("../models/Users");
 
 const JWT_SECRET = "dasddasdasd@zfdf";
 
@@ -22,6 +23,7 @@ router.post(
       .withMessage("Password must be at least 5 digit"),
   ],
   async (req, res) => {
+    let succes = false;
     const errors = validationResult(req);
     // return bad request if error accured
     if (!errors.isEmpty()) {
@@ -35,9 +37,11 @@ router.post(
       let user = await User.findOne({ email: req.body.email });
       if (user) {
         logger.warn("Duplicate user found", { email: req.body.email });
-        return res
-          .status(400)
-          .json({ error: "User already exits. Please use different Email." });
+        success = false;
+        return res.status(400).json({
+          success,
+          error: "User already exits. Please use different Email.",
+        });
       }
       const salt = await bcrypt.genSalt(10);
       secPass = await bcrypt.hash(req.body.password, salt);
@@ -56,7 +60,8 @@ router.post(
       logger.info("User created successfully", { userId: user._id });
 
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      success = true;
+      res.json({ success, authToken });
       // res.json(user);
       logger.info("tocken created succesfully for user", {
         email: req.body.email,
@@ -68,7 +73,7 @@ router.post(
       });
       res.status(500).send("Internal server error ");
     }
-  }
+  },
 );
 
 // =======================================================================================//
@@ -84,6 +89,7 @@ router.post(
   ],
 
   async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     // return bad request if error accured
     if (!errors.isEmpty()) {
@@ -111,9 +117,10 @@ router.post(
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
         logger.warn("password mismatch", { userId: user._id });
+        success = false;
         return res
           .status(400)
-          .json({ error: "Please enter correct credentials" });
+          .json({ success, error: "Please enter correct credentials" });
       }
 
       const data = {
@@ -125,18 +132,15 @@ router.post(
       logger.info("User found successfully", { userId: user._id });
       // Generate JWT
       const authToken = jwt.sign(
-        { id: user._id}, // payload
-        JWT_SECRET
+        { id: user._id }, // payload
+        JWT_SECRET,
       );
       // Send response
+      success = true;
       res.status(200).json({
         message: "Login Successfull",
+        success,
         authToken,
-        user: {
-          id: user._id,
-          email: user.email,
-          role: user.role,
-        },
       });
       // res.json({ authToken });
     } catch (error) {
@@ -146,7 +150,7 @@ router.post(
       });
       res.status(500).send("Internal server error ");
     }
-  }
+  },
 );
 
 // =======================================================================================//
@@ -163,7 +167,20 @@ router.get("/getUser", getuser, async (req, res) => {
     }
 
     res.json(user);
-
+  } catch (error) {
+    logger.error("Get user failed", {
+      message: error.message,
+      stack: error.stack,
+    });
+    res.status(500).send("Internal server error");
+  }
+});
+// Route 4: GET /api/auth/fetchAllUsers
+// Login required
+router.get("/fetchAllUsers", getuser, async (req, res) => {
+  try {
+    const users = await Users.find().select("-password");
+    res.json(users);
   } catch (error) {
     logger.error("Get user failed", {
       message: error.message,
